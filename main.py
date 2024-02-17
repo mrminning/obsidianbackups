@@ -47,9 +47,11 @@ def get_find_command(path="", patterns=[], conflict=False):
         else:
             first_line = False
         command.append("-name")
-        command.append("*" + pattern)
+        command.append("*" + pattern + "*.md")
     if conflict:
-        command.append("-o").append("-name").append("*(conflict*")
+        command.append("-o")
+        command.append("-name")
+        command.append("*(conflict*).md")
     return command
 
 
