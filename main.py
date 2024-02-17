@@ -84,6 +84,10 @@ if __name__ == '__main__':
 
     files = find_files(command)
 
+    if len(files) == 0:
+        print("No diffs found")
+        exit(0)
+
     prev_base_file = ""
     current_base_file = get_base_file(files[0], patterns)
     printed_file = False
@@ -98,6 +102,10 @@ if __name__ == '__main__':
                 printed_file = True
             command = [bat_command, file]
             subprocess.run(command)
+            print("Over-write original with:")
+            print("mv \"" + base_file + "\" \"" + file + "\"")
+            print("Or delete this file with:")
+            print("rm \"" + file + "\"\n")
         else:
             unchanged_files.append(file)
         prev_base_file = base_file
