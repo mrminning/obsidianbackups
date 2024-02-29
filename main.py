@@ -115,3 +115,9 @@ if __name__ == '__main__':
     print("No diff for the following files. Delete them with: ")
     for file in unchanged_files:
         print("rm \"" + file + "\"")
+    val = input("Enter \"rm\" to delete those files: ")
+    if "rm" == val:
+        for file in unchanged_files:
+            command = ["rm", file]
+            subprocess.run(command)
+            print("Deleted \"" + file + "\"")
