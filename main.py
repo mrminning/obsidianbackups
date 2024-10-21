@@ -85,11 +85,10 @@ def backup(backup_dir, obsidian_vault_path):
         backup_file = backup_dir + os.path.sep + "obsidian-" + now.strftime("%Y%m%d-%H%M%S") + ".tar.z"
         command = ["tar", "cfz", backup_file, obsidian_vault_path]
         print("Creating backupfile " + backup_file)
-        output = subprocess.run(command)
+        output = subprocess.run(command, capture_output=True, text=True)
 
 
 if __name__ == '__main__':
-    # @TODO config i ~/.config/obsidianbackups/.env
     # load_dotenv(dotenv_path=dotenv_path)
     # dotenv_path = Path('~/Projects/obsidianbackups/.env')
 
