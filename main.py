@@ -1,5 +1,6 @@
 import os
 import subprocess
+from datetime import datetime
 
 from dotenv import load_dotenv
 
@@ -12,6 +13,7 @@ from dotenv import load_dotenv
 # PATTERNS=comma,separated,string,of,patterns,indicating,duplicates
 # CONFLICT= blank for no, yes or anything to use.
 # OBSIDIANVAULT="/path/to/obsidian/vault/Obsidian Notes"
+# BACKUPDIR="/path/to/backup/dir"
 
 _CMD_FIND = "/usr/bin/find"
 _CMD_DIFF = "/usr/bin/diff"
@@ -71,6 +73,21 @@ def get_base_file(file_name, patterns):
     return ""
 
 
+def backup(backup_dir, obsidian_vault_path):
+    if len(backup_dir) == 0:
+        print("Backup path is not set (BACKUPDIR)")
+        return
+    if not os.path.exists(backup_dir):
+        print("Backup path not found: " + backup_dir)
+        return
+    if os.path.isdir(backup_dir):
+        now = datetime.now()
+        backup_file = backup_dir + os.path.sep + "obsidian-" + now.strftime("%Y%m%d-%H%M%S") + ".tar.z"
+        command = ["tar", "cfz", backup_file, obsidian_vault_path]
+        print("Creating backupfile " + backup_file)
+        output = subprocess.run(command)
+
+
 if __name__ == '__main__':
     # @TODO config i ~/.config/obsidianbackups/.env
     # load_dotenv(dotenv_path=dotenv_path)
@@ -81,7 +98,9 @@ if __name__ == '__main__':
     patterns = get_patterns(os.getenv("PATTERNS"))
     conflict = get_confict(os.getenv("CONFLICT"))
     obsidian_vault_path = os.getenv("OBSIDIANVAULT")
+    backup_dir = os.getenv("BACKUPDIR")
 
+    backup(backup_dir,obsidian_vault_path)
     command = get_find_command(obsidian_vault_path, patterns, conflict)
 
     files = find_files(command)
